@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Facts</title>
+    <style>
+           body{
+           background-image: url({{url_for ('static',filename='img.png')}});
+           background-size: cover;
+           min-height: 100vh;
+        }
+        a{
+            text-decoration: none;
+            border: 2px white solid;
+            font-size: 32px;
+            border-radius: 12px;
+            color: silver;
+            font-size: 32px;
+            padding: 12px 32px;
+            border-radius: 12px;
+        }
+        .banner{
+            width: 100%;
+            height: 10vh;
+            margin: 0;
+            padding: 0;
+            background-size: cover;
+        }
+          .navbar{
+            width: 85%;
+            margin: auto;
+            padding: 35px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        #logo{
+                color: white;
+        }
+         .navbar ul{
+            list-style: none;
+            display: inline;
+            margin: 0 20px;
+        }
+        .navbar ul a{
+            text-decoration: none;
+            text-transform: uppercase;
+            color: white;
+        }
+        #T{
+          display: none;
+        }
+        .thanks{
+            text-align: center;
+            font-size: 42px;
+            color: silver;
+            margin: 0;
+            padding: 0;
+        }
+        .wrapperAns{
+            margin-top: 24px;
+            min-height: 100px;
+        }
+          /* Additional styling for the form */
+        .fact-form {
+            width: 60%;
+            margin: auto;
+            padding: 10px;
+            border-radius: 12px;
+        }
+
+        .fact-form label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            color: silver;
+        }
+
+        .fact-form input {
+            width: 100%;
+            padding: 8px;
+            font-size: 18px;
+            border: 1px solid silver;
+            border-radius: 0; /* Set to 0 for more squared appearance */
+            margin-bottom: 20px;
+        }
+
+        /* Style for the "Submit Fact" button */
+        .fact-form button {
+            font-size: 32px;
+            padding: 12px 32px;
+            border-radius: 6px; /* Adjust this value for a more squared appearance */
+        }
+    </style>
+          <script>
+function onAnswerClick (thanks){
+    console.log(thanks)
+    document.querySelector("#T").style.display="block"
+  }
+    </script>
+</head>
+<body>
+    <div class="banner">
+        <div class="navbar">
+            <h1 id="logo">
+                Guss The Facts
+            </h1>
+             <a href="/" id="web1"> Guss Facts</a>
+            <a href="/add" id="web2"> Add Facts</a>
+        </div>
+    </div>
+    <div class="wrapperAns">
+        <p class="thanks" id="T">{{ thanks }}</p>
+    </div>
+<!-- Form for adding a new fact -->
+    <div class="fact-form">
+        <form action="/submit_fact" method="post">
+            <label for="fact">Fact:</label>
+            <input type="text" id="fact" name="fact" required>
+
+            <label for="answer">Answer:</label>
+            <input type="text" id="answer" name="answer" required>
+
+            <label for="true_option">True Option:</label>
+            <input type="text" id="true_option" name="true_option" required>
+
+            <label for="false_option">False Option:</label>
+            <input type="text" id="false_option" name="false_option" required>
+
+            <button type="submit" onclick="onAnswerClick('{{thanks}}')">Submit Fact</button>
+        </form>
+    </div>
+</body>
+</html>
