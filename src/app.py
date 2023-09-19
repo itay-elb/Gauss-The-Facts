@@ -8,7 +8,7 @@ mydb=mysql.connector.connect(
     host="localhost",
     user="root",
     passwd="Itay5858",
-    database="project"
+    database="projact"
 )
 
 @app.route("/")
