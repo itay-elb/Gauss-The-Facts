@@ -3,12 +3,12 @@ import mysql.connector
 import random
 
 
-app=Flask(__name__)
-mydb=mysql.connector.connect(
+app = Flask(__name__)
+mydb = mysql.connector.connect(
     host="localhost",
     user="root",
     passwd="Itay5858",
-    database="projact"
+    database="project"
 )
 
 @app.route("/")
@@ -53,9 +53,9 @@ def submit_fact():
 @app.route("/delete", methods=["POST"])
 def delete():
     mycursor = mydb.cursor()
-    sql = "delete from projact.fansfacts where fact = 'good'"
+    sql = "delete from project.fansfacts where fact = 'good'"
     mycursor.execute(sql)
     mydb.commit()
 
 if __name__ == '__main__':
-    app.run(debug=True,port=5000,host="0.0.0.0")
+    app.run(debug=True, port=5000, host="0.0.0.0")
