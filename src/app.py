@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask, render_template, request, redirect, url_for
 import mysql.connector
 import random
@@ -5,10 +7,10 @@ import random
 
 app = Flask(__name__)
 mydb = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    passwd="Itay5858",
-    database="project"
+    host=os.getenv("mysql","localhost"),
+    user=os.getenv("root","root"),
+    passwd=os.getenv("root","Itay5858"),
+    database=os.getenv("project","project")
 )
 
 @app.route("/")

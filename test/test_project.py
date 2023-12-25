@@ -9,9 +9,9 @@ def test_add(client):
 def test_submit_only_one_fact_add(client,app):
     response = client.post("/submit_fact", data={"fact":"check"})
     with (app.app_context()):
-        from src.app import mydb
+        from project.src.app import mydb
         mycursor = mydb.cursor()
-        sql="SELECT * FROM projact.fansfacts where fact = 'check'"
+        sql="SELECT * FROM project.fansfacts where fact = 'check'"
         mycursor.execute(sql)
         if (mycursor.fetchall() == []):
             assert True
@@ -21,9 +21,9 @@ def test_submit_only_one_fact_add(client,app):
 def test_submit_only_two_fact_add(client,app):
     response = client.post("/submit_fact", data={"fact":"check","qutsion":"if?"})
     with (app.app_context()):
-        from src.app import mydb
+        from project.src.app import mydb
         mycursor = mydb.cursor()
-        sql="SELECT * FROM projact.fansfacts where fact = 'check'"
+        sql="SELECT * FROM project.fansfacts where fact = 'check'"
         mycursor.execute(sql)
         if (mycursor.fetchall() == []):
             assert True
@@ -33,9 +33,9 @@ def test_submit_only_two_fact_add(client,app):
 def test_submit_only_three_fact_add(client, app):
     response = client.post("/submit_fact",data={"fact": "check", "qutsion": "if?", "true_option": "yes"})
     with (app.app_context()):
-        from src.app import mydb
+        from project.src.app import mydb
         mycursor = mydb.cursor()
-        sql = "SELECT * FROM projact.fansfacts where fact = 'check'"
+        sql = "SELECT * FROM project.fansfacts where fact = 'check'"
         mycursor.execute(sql)
         if (mycursor.fetchall() == []):
             assert True
@@ -45,9 +45,9 @@ def test_submit_only_three_fact_add(client, app):
 def test_submit_only_four_fact_add(client,app):
     response = client.post("/submit_fact", data={"fact":"good","qutsion":"try?","true_option":"yes","false_option":"no"})
     with (app.app_context()):
-        from src.app import mydb
+        from project.src.app import mydb
         mycursor = mydb.cursor()
-        sql="SELECT * FROM projact.fansfacts where fact = 'good'"
+        sql="SELECT * FROM project.fansfacts where fact = 'good'"
         mycursor.execute(sql)
         if(mycursor.fetchall() != []):
             assert True
@@ -57,9 +57,9 @@ def test_submit_only_four_fact_add(client,app):
 def test_restart(client,app):
     response=client.post("/delete")
     with (app.app_context()):
-        from src.app import mydb
+        from project.src.app import mydb
         mycursor = mydb.cursor()
-        sql="delete from projact.fansfacts where fact = 'good'"
+        sql="delete from project.fansfacts where fact = 'good'"
         mycursor.execute(sql)
         assert True
 
