@@ -9,7 +9,7 @@ app = Flask(__name__)
 mydb = mysql.connector.connect(
     host=os.getenv("mysql","localhost"),
     user=os.getenv("root","root"),
-    passwd=os.getenv("root","Itay5858"),
+    passwd=os.getenv("root","la159951159"),
     database=os.getenv("project","project")
 )
 
