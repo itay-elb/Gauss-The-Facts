@@ -1,5 +1,3 @@
-create database project;
-
 use project;
 
 create table facts(
@@ -7,10 +5,10 @@ create table facts(
     true_a varchar(30),
     false_a varchar(30),
     answer varchar(500),
-    qutsion varchar(300)
+    question varchar(300)
 );
 
-insert into facts (true_a,false_a,answer,qutsion) values
+insert into facts (true_a,false_a,answer,question) values
 ("Suden","Egypt","Sudan has more pyramids than any country in the world","Which country has the most pyramids?"),
 ("96,560km","154.8km"," The circulatory system is more than 96,560km long!","how long is are circulatory"),
 ("Texas","German","German chocolate cake was invented in Texas","German chocolate cake was invented in?"),
@@ -39,7 +37,7 @@ insert into facts (true_a,false_a,answer,qutsion) values
  create table fansfacts(
     fact_id integer primary key auto_increment,
     fact varchar (500),
-    qutsion varchar (300),
+    question varchar (300),
     true_option varchar(30),
     false_option varchar(30)
  );
