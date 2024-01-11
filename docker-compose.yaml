@@ -6,12 +6,12 @@ services:
     restart: unless-stopped
     build:
       context: ./src
-      dockerfile: Dockerfile
+      dockerfile: DockerFile
     environment:
-      DB_HOST: mysql
-      DB_USER: root
-      DB_PASSWORD: root
-      DB_DATABASE: project
+      DB_HOST: "mysql"
+      DB_USER: "root"
+      DB_PASSWORD: "root"
+      DB_DATABASE: "project"
     depends_on:
      - mysql
     ports:
@@ -21,12 +21,10 @@ services:
     image: "mysql:latest"
     container_name: flask_mysql
     restart: always
-    build:
-      context: ./db
-      dockerfile: Dockerfile
+    build: ./db
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: project
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: "project"
     ports:
       - "3307:3306"
     volumes:
