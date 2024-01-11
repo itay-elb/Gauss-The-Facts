@@ -1,16 +1,13 @@
-import os
-
 from flask import Flask, render_template, request, redirect, url_for
 import mysql.connector
 import random
 
-
 app = Flask(__name__)
 mydb = mysql.connector.connect(
-    host=os.getenv("mysql","localhost"),
-    user=os.getenv("root","root"),
-    passwd=os.getenv("root","Itay5858"),
-    database=os.getenv("project","project")
+    host="mysql",
+    user="root",
+    passwd="root",
+    database="project"
 )
 
 @app.route("/")
@@ -32,6 +29,7 @@ def index():
     question = l[4]
     return render_template("homepage.html", question=question, answer=answer, a1=a1, a2=a2)
 
+
 @app.route("/add")
 def add():
     return render_template("addfacts.html")
@@ -40,17 +38,18 @@ def add():
 @app.route("/submit_fact", methods=["POST"])
 def submit_fact():
     fact = request.form["fact"]
-    qutsion = request.form["qutsion"]
+    question = request.form["question"]
     true_option = request.form["true_option"]
     false_option = request.form["false_option"]
 
     mycursor = mydb.cursor()
-    sql = "INSERT INTO fansfacts (fact, true_option, false_option, qutsion) VALUES (%s, %s, %s, %s)"
-    val = (fact, true_option, false_option, qutsion)
+    sql = "INSERT INTO fansfacts (fact, true_option, false_option, question) VALUES (%s, %s, %s, %s)"
+    val = (fact, true_option, false_option, question)
     mycursor.execute(sql, val)
     mydb.commit()
 
     return redirect(url_for("add"))
+
 
 @app.route("/delete", methods=["POST"])
 def delete():
@@ -58,6 +57,7 @@ def delete():
     sql = "delete from project.fansfacts where fact = 'good'"
     mycursor.execute(sql)
     mydb.commit()
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000, host="0.0.0.0")
