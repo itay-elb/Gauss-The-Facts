@@ -4,33 +4,20 @@ services:
     image: "flask_app:latest"
     container_name: flask_app
     restart: unless-stopped
-    build:
-      context: ./src
-      dockerfile: DockerFile
-    environment:
-      DB_HOST: "mysql"
-      DB_USER: "root"
-      DB_PASSWORD: "root"
-      DB_DATABASE: "project"
+    build: ./src/
+    command: sh -c "sleep 10s; python3 ./app.py"
     depends_on:
      - mysql
     ports:
-     - "5000:5000"
+     - '5000:5000'
 
   mysql:
     image: "mysql:latest"
     container_name: flask_mysql
     restart: always
-    build: ./db
+    build: ./db/
     environment:
-      MYSQL_ROOT_PASSWORD: "root"
-      MYSQL_DATABASE: "project"
+      MYSQL_ROOT_PASSWORD: 'root'
+      MYSQL_DATABASE: 'project'
     ports:
-      - "3307:3306"
-    volumes:
-      - db_data:/var/lib/mysql
-      - db_data_config:/etc/mysql
-
-volumes:
-  db_data:
-  db_data_config:
+      - '3307:3306'
