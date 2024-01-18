@@ -56,7 +56,7 @@ jobs:
 
     - name: Test with pytest
       run: docker-compose exec app pytest test/
-      working-directory: ./test/
+      working-directory: .
 
     - name: Stop containers
       run: docker-compose down
