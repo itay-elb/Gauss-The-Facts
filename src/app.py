@@ -1,14 +1,24 @@
 from flask import Flask, render_template, request, redirect, url_for
 import mysql.connector
 import random
+import os
 
 app = Flask(__name__)
-mydb = mysql.connector.connect(
-    host="mysql",
-    user="root",
-    passwd="root",
-    database="project"
-)
+if os.getenv('DOCKERIZED') == 'true':
+    mydb = mysql.connector.connect(
+        host='mysql',
+        user='root',
+        passwd='root',
+        database='project'
+    )
+else:
+    mydb = mysql.connector.connect(
+        host='localhost',
+        user='root',
+        passwd='Itay5858',
+        database='project'
+    )
+
 
 @app.route("/")
 def index():
@@ -27,7 +37,7 @@ def index():
         a2 = l[1]
     answer = l[3]
     question = l[4]
-    return render_template("homepage.html", question=question, answer=answer, a1=a1, a2=a2)
+    return render_template("homepage.html", question=question, answer=answer, a1=a1, a2=a2, a=a)
 
 
 @app.route("/add")
@@ -41,6 +51,9 @@ def submit_fact():
     question = request.form["question"]
     true_option = request.form["true_option"]
     false_option = request.form["false_option"]
+
+    if not fact or not question or not true_option or not false_option:
+        return "All fields are required.", 400
 
     mycursor = mydb.cursor()
     sql = "INSERT INTO fansfacts (fact, true_option, false_option, question) VALUES (%s, %s, %s, %s)"
