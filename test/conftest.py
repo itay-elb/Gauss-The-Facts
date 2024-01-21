@@ -1,21 +1,8 @@
 import pytest
-from pytest_docker import docker_services
 import mysql.connector
 
-@pytest.fixture(scope="module")
-def mysql_service(docker_services):
-    service = docker_services.start('mysql',
-        environment={
-            'MYSQL_ROOT_PASSWORD': 'root',
-            'MYSQL_DATABASE': 'project'
-        },
-        network='protest_default')
-    docker_services.wait_until_responsive(timeout=30, host='mysql', port=3307)
-    yield service
-    service.remove()
-
 @pytest.fixture
-def db(mysql_service):
+def db():
     mydb = mysql.connector.connect(
         host='mysql',
         user='root',
