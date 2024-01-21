@@ -96,10 +96,34 @@
         }
     </style>
       <script>
-function onAnswerClick (answer){
-    console.log(answer)
-    document.querySelector("#A").style.display="block"
+function onAnswerClick (a){
+ console.log(a)
+ if(a==1){
+  window.location.href="/";
   }
+  else{
+     document.querySelector("#b1").style.background="red"
+     document.querySelector("#b2").style.background="green"
+     document.querySelector("#b2").disabled=true;
+     }
+        document.querySelector("#A").style.display="block"
+
+  }
+
+ function onAnswerClick2 (a){
+    console.log(a)
+ if(a==2)
+  window.location.href="/";
+  else{
+     document.querySelector("#b2").style.background="red"
+     document.querySelector("#b1").style.background="green"
+     document.querySelector("#b1").disabled=true;
+     }
+
+        document.querySelector("#A").style.display="block"
+
+  }
+
     </script>
 </head>
 <body>
@@ -116,8 +140,8 @@ function onAnswerClick (answer){
     <div id="Q">{{ question }}</div>
   <div class="btns">
     <div class="wrapper-btns">
-      <button onclick="onAnswerClick('{{answer}}')" id="b1" >{{ a1 }}</button>
-      <button id="b2" onclick="onAnswerClick('{{answer}}')" >{{ a2 }}</button>
+      <button id="b1" onclick="onAnswerClick('{{a}}')" >{{ a1 }}</button>
+      <button id="b2" onclick="onAnswerClick2('{{a}}')" >{{ a2 }}</button>
     </div>
 
   </div>
