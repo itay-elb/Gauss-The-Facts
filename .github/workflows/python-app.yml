@@ -34,7 +34,7 @@ jobs:
     - name: Start Docker services
       run: docker-compose up -d
     - name: Run pytest tests
-      run: docker-compose exec app pytest test/
+      run: docker-compose exec app pytest ./test/
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
