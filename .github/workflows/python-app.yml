@@ -29,10 +29,12 @@ jobs:
         pip install flake8 pytest
         pip install pytest-docker
         pip install -r ./src/requirements.txt
+    - name: Install Docker
+      run: sudo apt-get update && sudo apt-get install docker
     - name: Start Docker services
       run: docker-compose up -d
     - name: Run pytest tests
-      run: docker-compose exec test pytest ./test/
+      run: docker-compose exec -T app pytest ./test/
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
