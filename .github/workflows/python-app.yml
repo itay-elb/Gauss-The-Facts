@@ -29,6 +29,9 @@ jobs:
         pip install flake8 pytest
         pip install pytest
         pip install -r ./src/requirements.txt
+    - name: Wait for database initialization
+      run: sleep 20  # Adjust the duration as needed
+
     - name: Run tests
       run: pytest test/
     - name: Lint with flake8
