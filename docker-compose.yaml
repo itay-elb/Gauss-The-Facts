@@ -23,3 +23,15 @@ services:
       MYSQL_HOST: 'mysql'
     ports:
       - '3307:3306'
+
+  test:
+    image: "python:3.10"
+    container_name: flask_test
+    restart: unless-stopped
+    volumes:
+      - ./src:/src
+    working_dir: /src
+    command: pytest
+    depends_on:
+      - app
+      - mysql
