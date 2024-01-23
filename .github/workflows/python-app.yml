@@ -17,21 +17,16 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    services:
-      mysql:
-        image: mysql:5.7
-        env:
-          MYSQL_ROOT_PASSWORD: root
-        ports:
-          - 3306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python 3.10
       uses: actions/setup-python@v3
       with:
         python-version: "3.10"
+    - name: Build MySQL image
+      run:  docker build -t test-mysql ./db/
+    - name: Set up MySQL service
+      run: docker run --name test-mysql -d test-mysql
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
@@ -40,9 +35,6 @@ jobs:
         pip install -r ./src/requirements.txt
     - name: Wait for MySQL to start
       run: sleep 10
-    - name: Copy SQL file to MySQL container
-      run: |
-        docker cp db/mysql.sql mysql:/docker-entrypoint-initdb.d/
     - name: Run tests
       run: |
         export TESTING=true
