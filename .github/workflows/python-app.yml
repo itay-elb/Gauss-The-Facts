@@ -40,7 +40,7 @@ jobs:
         pip install -r ./src/requirements.txt
     - name: Copy SQL file to MySQL container
       run: |
-        docker cp /project/db/mysql.sql mysql:/docker-entrypoint-initdb.d/
+        docker cp ./db/mysql.sql mysql:/docker-entrypoint-initdb.d/
     - name: Run tests
       run: |
         export TESTING=true
