@@ -17,6 +17,15 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python 3.10
@@ -29,11 +38,13 @@ jobs:
         pip install flake8 pytest
         pip install pytest
         pip install -r ./src/requirements.txt
-    - name: Wait for database initialization
-      run: sleep 20  # Adjust the duration as needed
-
+    - name: Copy SQL file to MySQL container
+      run: |
+        docker cp /project/db/mysql.sql mysql:/docker-entrypoint-initdb.d/
     - name: Run tests
-      run: pytest test/
+      run: |
+        export TESTING=true
+        pytest test/
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
