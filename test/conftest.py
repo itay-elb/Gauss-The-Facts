@@ -4,7 +4,7 @@ import mysql.connector
 @pytest.fixture
 def db():
     mydb = mysql.connector.connect(
-        host='localhost',
+        host='mysql',
         user='root',
         passwd='root',
         database='project',
