@@ -37,7 +37,12 @@ jobs:
       run: sleep 10
     - name: Check MySQL service
       run: |
-        docker ps
+        echo "Waiting for MySQL to start..."
+        until mysql -h localhost -P 3306 -u root -proot -e "SELECT 1"; do
+          echo "MySQL is unavailable - sleeping"
+          sleep 1
+        done
+        echo "MySQL is up - executing command"
     - name: Run tests
       run: |
         export TESTING=true
