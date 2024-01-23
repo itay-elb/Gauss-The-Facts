@@ -33,14 +33,9 @@ jobs:
       run:  docker build -t test-mysql ./db/
     - name: Set up MySQL service
       run: docker run --name test-mysql -d test-mysql
-    - name: Wait for MySQL to start
+    - name: Check MySQL service
       run: |
-        echo "Waiting for MySQL to start..."
-        until mysql -h localhost -P 3306 -u root -proot -e "SELECT 1"; do
-          echo "MySQL is unavailable - sleeping"
-          sleep 1
-        done
-        echo "MySQL is up - executing command"
+        docker ps
     - name: Check MySQL service
       run: |
         echo "Waiting for MySQL to start..."
