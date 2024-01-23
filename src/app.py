@@ -9,16 +9,23 @@ if os.getenv('DOCKERIZED') == 'true':
         host='mysql',
         user='root',
         passwd='root',
-        database='project'
+        database='project',
+        port=3306
+    )
+elif os.getenv('TESTING') == 'true':
+    mydb = mysql.connector.connect(
+        host='localhost',
+        user='root',
+        passwd='root',
+        database='project',
     )
 else:
     mydb = mysql.connector.connect(
         host='localhost',
         user='root',
-        passwd='Itay5858',
-        database='project'
+        passwd='root',
+        database='project',
     )
-
 
 @app.route("/")
 def index():
