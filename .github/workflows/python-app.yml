@@ -38,6 +38,8 @@ jobs:
         pip install flake8 pytest
         pip install pytest
         pip install -r ./src/requirements.txt
+    - name: Wait for MySQL to start
+      run: sleep 10
     - name: Copy SQL file to MySQL container
       run: |
         docker cp ./db/mysql.sql mysql:/docker-entrypoint-initdb.d/
