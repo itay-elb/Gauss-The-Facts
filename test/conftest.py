@@ -4,10 +4,11 @@ import mysql.connector
 @pytest.fixture
 def db():
     mydb = mysql.connector.connect(
-        host='mysql',
+        host='localhost',
         user='root',
         passwd='root',
-        database='project'
+        database='project',
+        port=3306
     )
     yield mydb
     mydb.close()
@@ -18,5 +19,5 @@ def app():
    yield app
 
 @pytest.fixture()
-def client(app):
+def client(app, db):
    return app.test_client()
