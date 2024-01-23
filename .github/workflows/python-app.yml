@@ -42,7 +42,7 @@ jobs:
       run: sleep 10
     - name: Copy SQL file to MySQL container
       run: |
-        docker cp ./db/mysql.sql mysql:/docker-entrypoint-initdb.d/
+        docker cp db/mysql.sql mysql:/docker-entrypoint-initdb.d/
     - name: Run tests
       run: |
         export TESTING=true
