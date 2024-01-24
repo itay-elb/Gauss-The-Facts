@@ -23,7 +23,6 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: root
           MYSQL_DATABASE: project
-          MYSQL_HOST: localhost
         ports: ['3306:3306']
         options: >-
           --health-cmd="mysqladmin ping"
@@ -45,7 +44,7 @@ jobs:
         pip install -r ./src/requirements.txt
     - name: Load MySQL data
       run: |
-            while ! mysqladmin ping -h"localhost" -uroot -p"root"; do
+            while ! mysqladmin ping -h"mysql" -uroot -p"root"; do
              echo "Waiting for MySQL..."
              sleep 5
             done
