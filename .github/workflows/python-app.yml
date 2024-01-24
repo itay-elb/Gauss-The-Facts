@@ -4,18 +4,31 @@
 name: Python application
 
 on:
-  push:
+ push:
     branches: [ "main" ]
-  pull_request:
+ pull_request:
     branches: [ "main" ]
 
 permissions:
-  contents: read
+ contents: read
 
 jobs:
-  build:
+ build:
 
     runs-on: ubuntu-latest
+
+    services:
+      db:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: project
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
 
     steps:
     - uses: actions/checkout@v3
@@ -29,15 +42,9 @@ jobs:
         pip install flake8 pytest
         pip install pytest
         pip install -r ./src/requirements.txt
-    - name: Build MySQL image
-      run:  docker build -t test-mysql ./db/
-    - name: Set up MySQL service
-      run: docker run --name test-mysql -d test-mysql
-    - name: Check MySQL service
+    - name: Load MySQL data
       run: |
-        docker ps
-    - name: Check MySQL service
-      run: sleep 30
+        cat mysql.sql | mysql -h localhost -u root -proot project
     - name: Run tests
       run: |
         export TESTING=true
