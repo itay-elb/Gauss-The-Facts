@@ -44,7 +44,11 @@ jobs:
         pip install -r ./src/requirements.txt
     - name: Load MySQL data
       run: |
-        cat db/mysql.sql | mysql -h localhost -u root -proot project
+            while ! mysqladmin ping -h"localhost" -uroot -p"root"; do
+             echo "Waiting for MySQL..."
+             sleep 5
+            done
+            cat db/mysql.sql | mysql -h localhost -u root -proot project
     - name: Run tests
       run: |
         export TESTING=true
