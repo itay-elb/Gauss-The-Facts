@@ -24,11 +24,6 @@ jobs:
           MYSQL_ROOT_PASSWORD: root
           MYSQL_DATABASE: project
         ports: ['3306:3306']
-        options: >-
-          --health-cmd="mysqladmin ping"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
 
     steps:
     - uses: actions/checkout@v3
@@ -44,10 +39,6 @@ jobs:
         pip install -r ./src/requirements.txt
     - name: Load MySQL data
       run: |
-            while ! mysqladmin ping -h"mysql" -uroot -p"root"; do
-             echo "Waiting for MySQL..."
-             sleep 5
-            done
             cat db/mysql.sql | mysql -h localhost -u root -proot project
     - name: Run tests
       run: |
