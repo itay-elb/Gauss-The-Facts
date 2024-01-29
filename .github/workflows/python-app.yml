@@ -24,6 +24,9 @@ jobs:
         ports:
           - '3306:3306'
 
+    outputs:
+      ip: ${{ job.container.ip }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -40,7 +43,7 @@ jobs:
 
       - name: Get MySQL service IP address
         id: mysql_ip
-        run: echo "::set-output name=IP::$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' db)"
+        run: echo "::set-output name=IP::${{ outputs.ip }}"
 
       - name: Load MySQL data
         run: |
