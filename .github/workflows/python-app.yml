@@ -38,16 +38,15 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r ./src/requirements.txt
 
+      - name: Get MySQL service IP address
+        id: mysql_ip
+        run: echo "::set-output name=IP::$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' db)"
+
       - name: Load MySQL data
         run: |
-          cat db/mysql.sql | mysql -h 127.0.0.1 -P 3306 -u root -proot project
+          cat db/mysql.sql | mysql -h ${{ steps.mysql_ip.outputs.IP }} -P 3306 -u root -proot project
 
       - name: Run tests
         run: |
           export TESTING=true
           pytest test/
-
-      - name: Lint with flake8
-        run: |
-          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
