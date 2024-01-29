@@ -40,7 +40,7 @@ jobs:
 
       - name: Load MySQL data
         run: |
-          cat db/mysql.sql | mysql -h localhost -P 3306 -u root -proot project
+           cat db/mysql.sql | mysql -h 127.0.0.1 -P 3306 -u root -proot project
 
       - name: Run tests
         run: |
