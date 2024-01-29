@@ -24,9 +24,6 @@ jobs:
         ports:
           - '3306:3306'
 
-    outputs:
-      ip: ${{ job.container.ip }}
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -41,14 +38,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r ./src/requirements.txt
 
-      - name: Get MySQL service IP address
-        id: mysql_ip
-        run: echo "::set-output name=IP::${{ outputs.ip }}"
-
       - name: Load MySQL data
         run: |
-          MYSQL_SERVICE_IP=${{ steps.mysql_ip.outputs.IP }}
-          cat db/mysql.sql | mysql -h $MYSQL_SERVICE_IP -P 3306 -u root -proot project
+          cat db/mysql.sql | mysql -h localhost -P 3306 -u root -proot project
 
       - name: Run tests
         run: |
