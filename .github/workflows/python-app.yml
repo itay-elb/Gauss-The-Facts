@@ -44,8 +44,8 @@ jobs:
 
       - name: Load MySQL data
         run: |
-           MYSQL_SERVICE_IP=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' db)
-           cat db/mysql.sql | mysql -h $MYSQL_SERVICE_IP -P 3306 -u root -proot project
+          MYSQL_SERVICE_IP=${{ steps.mysql_ip.outputs.IP }}
+          cat db/mysql.sql | mysql -h $MYSQL_SERVICE_IP -P 3306 -u root -proot project
 
       - name: Run tests
         run: |
