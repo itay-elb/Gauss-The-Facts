@@ -6,16 +6,17 @@ import os
 app = Flask(__name__)
 if os.getenv('DOCKERIZED') == 'true':
     mydb = mysql.connector.connect(
-        host='mysql',
+        host='127.0.0.1',
         user='root',
         passwd='root',
-        database='project'
+        database='project',
+        port=3306
     )
 else:
     mydb = mysql.connector.connect(
         host='localhost',
         user='root',
-        passwd='Itay5858',
+        passwd='la159951159',
         database='project'
     )
 
