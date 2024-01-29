@@ -11,15 +11,17 @@ if os.getenv('DOCKERIZED') == 'true':
         passwd='root',
         database='project',
         port=3306
+
     )
 else:
     mydb = mysql.connector.connect(
         host='localhost',
         user='root',
+
         passwd='la159951159',
         database='project'
-    )
 
+    )
 
 @app.route("/")
 def index():
