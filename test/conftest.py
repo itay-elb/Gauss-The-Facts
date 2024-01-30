@@ -8,7 +8,7 @@ def db():
         user='root',
         passwd='root',
         database='project',
-        port=3306
+        port=3307
     )
     yield mydb
     mydb.close()

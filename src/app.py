@@ -4,20 +4,13 @@ import random
 import os
 
 app = Flask(__name__)
-if os.getenv('DOCKERIZED') == 'true':
+if os.environ.get('DOCKERIZED'):
     mydb = mysql.connector.connect(
         host='mysql',
         user='root',
         passwd='root',
         database='project',
-        port=3306
-    )
-elif os.getenv('TESTING') == 'true':
-    mydb = mysql.connector.connect(
-        host='localhost',
-        user='root',
-        passwd='root',
-        database='project',
+        port=3307
     )
 else:
     mydb = mysql.connector.connect(
@@ -25,6 +18,7 @@ else:
         user='root',
         passwd='root',
         database='project',
+        port=3306
     )
 
 @app.route("/")
