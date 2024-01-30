@@ -30,6 +30,9 @@ jobs:
         docker-compose build --no-cache
         docker-compose up -d 
 
+    - name: wait
+      run: sleep 30
+
     - name: Run tests
       run: pytest
 
