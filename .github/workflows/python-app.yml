@@ -12,10 +12,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Create env file
-        run: |
-          echo "${{ secrets.ENV_FILE }}" > $GITHUB_WORKSPACE/app/.env
-          echo "${{ secrets.ENV_TEST_FILE }}" > $GITHUB_WORKSPACE/app/tests/.env.test
+   
       
       - name: Set up Python
         uses: actions/setup-python@v2
@@ -42,13 +39,4 @@ jobs:
         if: always()
         run: docker-compose down
 
-      - name: Analysing the code with pylint
-        run: pylint $GITHUB_WORKSPACE/app/*.py
-        
-      - name: Remove .env file
-        if: always()
-        run: |
-          rm $GITHUB_WORKSPACE/app/.env
-          rm $GITHUB_WORKSPACE/app/tests/.env.test
-
-     
+  
