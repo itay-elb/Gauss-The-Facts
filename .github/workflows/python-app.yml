@@ -1,42 +1,54 @@
-name: Test
+name: CI
 
 on:
- push:
-    branches: [ main ]
- pull_request:
-    branches: [ main ]
-
+  push:
+  
 jobs:
- docker:
-    timeout-minutes: 10
+
+  build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v1
+      - name: Checkout
+        uses: actions/checkout@v2
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.8'
+      - name: Create env file
+        run: |
+          echo "${{ secrets.ENV_FILE }}" > $GITHUB_WORKSPACE/app/.env
+          echo "${{ secrets.ENV_TEST_FILE }}" > $GITHUB_WORKSPACE/app/tests/.env.test
+      
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+          cache: 'pip'
+          
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt 
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install pytest mysql-connector-python flask
+      - name: Start services with Docker Compose
+        run: docker-compose up -d
 
-    - name: Start containers
-      run: |
-        docker-compose build --no-cache
-        docker-compose up -d 
+      - name: Wait for healthchecks
+        run: |
+          timeout 120s sh -c 'until docker ps | grep flask_mysql | grep -q healthy && docker ps | grep flask_app | grep -q healthy; do echo "Waiting for containers to be healthy..."; sleep 2; done'
 
-    - name: wait
-      run: sleep 30
+      - name: Test code with pytest
+        run: pytest test/
+          
+      - name: Shutdown Docker Compose
+        if: always()
+        run: docker-compose down
 
-    - name: Run tests
-      run: pytest
+      - name: Analysing the code with pylint
+        run: pylint $GITHUB_WORKSPACE/app/*.py
+        
+      - name: Remove .env file
+        if: always()
+        run: |
+          rm $GITHUB_WORKSPACE/app/.env
+          rm $GITHUB_WORKSPACE/app/tests/.env.test
 
-    - name: Stop containers
-      if: always()
-      run: docker-compose down
-
+     
