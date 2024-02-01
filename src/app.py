@@ -4,22 +4,20 @@ import random
 import os
 
 app = Flask(__name__)
-if os.environ.get('DOCKERIZED'):
-    mydb = mysql.connector.connect(
-        host='mysql',
-        user='root',
-        passwd='root',
-        database='project',
-        port=3307
-    )
-else:
-    mydb = mysql.connector.connect(
-        host='localhost',
-        user='root',
-        passwd='root',
-        database='project',
-        port=3307
-    )
+
+host = os.environ.get('MYSQL_HOST')
+user = os.environ.get('MYSQL_USER')
+password = os.environ.get('MYSQL_PASSWORD')
+database = os.environ.get('MYSQL_DATABASE')
+port = int(os.environ.get('MYSQL_PORT'))
+
+mydb = mysql.connector.connect(
+    host=host,
+    user=user,
+    passwd=password,
+    database=database,
+    port=port
+)
 
 @app.route("/")
 def index():
