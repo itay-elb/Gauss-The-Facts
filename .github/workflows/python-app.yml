@@ -1,42 +1,52 @@
-name: Test
+name: CI
 
 on:
  push:
-    branches: [ main ]
- pull_request:
-    branches: [ main ]
 
 jobs:
- docker:
-    timeout-minutes: 10
+ check_docker_compose:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout
-      uses: actions/checkout@v1
+      - name: Checkout
+        uses: actions/checkout@v2
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.8'
+      - name: Validate Docker Compose File
+        run: docker-compose config
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install pytest mysql-connector-python flask
+      - name: Start services with Docker Compose
+        run: docker-compose up -d
 
-    - name: Start containers
-      run: |
-        docker-compose build --no-cache
-        docker-compose up -d 
+ copy_files_and_run_tests:
+    needs: check_docker_compose
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
 
-    - name: wait
-      run: sleep 30
+      - name: Copy files
+        run: |
+          mkdir test_directory
+          cp -r db src test .env test_directory/
 
-    - name: Run tests
-      run: pytest
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r ./src/requirements.txt 
 
-    - name: Stop containers
-      if: always()
-      run: docker-compose down
+      - name: Start MySQL Container
+        run: docker-compose up -d mysql
 
+      - name: Run tests
+        run: |
+          cd test_directory
+          pytest test/
+
+ shutdown_services:
+    needs: copy_files_and_run_tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Shutdown Docker Compose
+        run: docker-compose down
