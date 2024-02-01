@@ -4,39 +4,44 @@ on:
  push:
 
 jobs:
- build:
+ check_docker_compose:
     runs-on: ubuntu-latest
-    env:
-      MYSQL_HOST: 'mysql'
-      MYSQL_USER: 'root'
-      MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
-      MYSQL_DATABASE: 'project'
-      MYSQL_PORT: 3307
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
-          cache: 'pip'
-          
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r ./src/requirements.txt 
+      - name: Validate Docker Compose File
+        run: docker-compose config
 
       - name: Start services with Docker Compose
         run: docker-compose up -d
 
-      - name: Wait for healthchecks
-        run: |
-          timeout 120s sh -c 'until docker ps | grep flask_mysql | grep -q healthy && docker ps | grep flask_app | grep -q healthy; do echo "Waiting for containers to be healthy..."; sleep 2; done'
+ copy_files_and_run_tests:
+    needs: check_docker_compose
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
 
-      - name: Test code with pytest
-        run: pytest test/
-          
+      - name: Copy files
+        run: |
+          mkdir test_directory
+          cp -r db src test .env test_directory/
+
+      - name: Start MySQL Container
+        run: docker-compose up -d mysql
+
+      - name: Run tests
+        run: |
+          cd test_directory
+          pytest test/
+
+ shutdown_services:
+    needs: copy_files_and_run_tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
       - name: Shutdown Docker Compose
-        if: always()
         run: docker-compose down
