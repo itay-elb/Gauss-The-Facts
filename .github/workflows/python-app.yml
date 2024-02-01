@@ -1,19 +1,20 @@
 name: CI
 
 on:
-  push:
-  
-jobs:
+ push:
 
-  build:
+jobs:
+ build:
     runs-on: ubuntu-latest
+    env:
+      DOCKERIZED: true
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: project
 
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-   
-      
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
@@ -38,5 +39,3 @@ jobs:
       - name: Shutdown Docker Compose
         if: always()
         run: docker-compose down
-
-  
