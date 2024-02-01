@@ -28,6 +28,11 @@ jobs:
           mkdir test_directory
           cp -r db src test .env test_directory/
 
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r ./src/requirements.txt 
+
       - name: Start MySQL Container
         run: docker-compose up -d mysql
 
