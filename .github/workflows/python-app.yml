@@ -40,6 +40,9 @@ jobs:
       - name: Wait
         run: sleep 30
 
+      - name: Print MySQL Logs
+        run: docker-compose logs mysql
+
       - name: Run tests
         run: |
           cd test_directory
