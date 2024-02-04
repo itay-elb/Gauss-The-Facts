@@ -2,6 +2,7 @@ name: CI
 
 on:
  push:
+    branches: [ "main"]
 
 jobs:
  check_docker_compose:
@@ -16,7 +17,7 @@ jobs:
       - name: Start services with Docker Compose
         run: docker-compose up -d
 
- copy_files_and_run_tests:
+ run_tests:
     needs: check_docker_compose
     runs-on: ubuntu-latest
     steps:
@@ -26,7 +27,7 @@ jobs:
       - name: Copy files
         run: |
           mkdir test_directory
-          cp -r db src test .env test_directory/
+          cp -r db src test test_directory/
 
       - name: Install dependencies
         run: |
@@ -36,17 +37,20 @@ jobs:
       - name: Start MySQL Container
         run: docker-compose up -d mysql
 
+      - name: Wait
+        run: sleep 30
+
       - name: Run tests
         run: |
           cd test_directory
           pytest test/
 
  shutdown_services:
-    needs: copy_files_and_run_tests
+    needs: run_tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
       - name: Shutdown Docker Compose
-        run: docker-compose down
+        run: docker-compose down;
