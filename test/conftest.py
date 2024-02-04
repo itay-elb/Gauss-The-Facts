@@ -1,21 +1,14 @@
 import pytest
 import mysql.connector
-import os
 
 @pytest.fixture
 def db():
-    host = os.environ.get('MYSQL_HOST')
-    user = os.environ.get('MYSQL_USER')
-    password = os.environ.get('MYSQL_PASSWORD')
-    database = os.environ.get('MYSQL_DATABASE')
-    port = int(os.environ.get('MYSQL_PORT'))
-
     mydb = mysql.connector.connect(
-        host=host,
-        user=user,
-        passwd=password,
-        database=database,
-        port=port
+        host='mysql',
+        user='root',
+        passwd='root',
+        database='project',
+        port=3306
     )
     yield mydb
     mydb.close()
