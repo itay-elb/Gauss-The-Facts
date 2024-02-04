@@ -1,11 +1,11 @@
 from src.app import mydb
 mycursor = mydb.cursor()
 
-def test_home(client):
+def test_home(client, db):
     response = client.get("/")
     assert b"<title>Guss The Facts</title>" in response.data
 
-def test_add(client):
+def test_add(client, db):
     response = client.get("/add")
     assert b"<title>Add Facts</title>" in response.data
 
