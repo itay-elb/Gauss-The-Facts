@@ -27,7 +27,7 @@ jobs:
       - name: Copy files
         run: |
           mkdir test_directory
-          cp -r db src test test_directory/
+          cp -r db src test .env test_directory/
 
       - name: Install dependencies
         run: |
