@@ -4,25 +4,27 @@ import random
 import os
 
 app = Flask(__name__)
-
-host = os.environ.get('MYSQL_HOST')
-user = os.environ.get('MYSQL_USER')
-password = os.environ.get('MYSQL_PASSWORD')
-database = os.environ.get('MYSQL_DATABASE')
-port = int(os.environ.get('MYSQL_PORT'))
-
-mydb = mysql.connector.connect(
-    host=host,
-    user=user,
-    passwd=password,
-    database=database,
-    port=port
-)
+if os.environ.get('DOCKERIZED'):
+    mydb = mysql.connector.connect(
+        host='mysql',
+        user='root',
+        passwd='root',
+        database='project',
+        port=3306
+    )
+else:
+    mydb = mysql.connector.connect(
+        host='localhost',
+        user='root',
+        passwd='Itay5858',
+        database='project',
+        port=3306
+    )
 
 @app.route("/")
 def index():
     a = random.randint(1, 2)
-    i = random.randint(1, 20)
+    i = random.randint(1, 25)
     sql = "SELECT * FROM facts WHERE fact_id = {}".format(i)
     mycursor = mydb.cursor()
     mycursor.execute(sql)
