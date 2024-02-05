@@ -24,6 +24,9 @@ jobs:
       run: |
         echo "${{ secrets.ENV_FILE }}" > $GITHUB_WORKSPACE/.env
 
+    - name: Wait
+      run: sleep 20
+
     - name: Run Pytest
       run: pytest
 
