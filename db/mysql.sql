@@ -9,7 +9,7 @@ create table facts(
 );
 
 insert into facts (true_a,false_a,answer,question) values
-("Suden","Egypt","Sudan has more pyramids than any country in the world","Which country has the most pyramids?"),
+("Sudden","Egypt","Sudan has more pyramids than any country in the world","Which country has the most pyramids?"),
 ("96,560km","154.8km"," The circulatory system is more than 96,560km long!","how long is are circulatory"),
 ("Texas","German","German chocolate cake was invented in Texas","German chocolate cake was invented in?"),
 ("rubber ducks","cars","In 1992, a cargo ship carrying approximately 29,000 bath toys spilled in the northern Pacific Ocean.",
@@ -17,8 +17,8 @@ insert into facts (true_a,false_a,answer,question) values
 ("8","11","there are identical, fraternal, half-identical,mirror image, mixed, chromosome, superfecundation, and superfetation .",
 "There are___different types of twins."),
 ("No","Yes","no, but they can swim up to speeds of 25 mph.","Penguins can fly?"),
-("No","Yes","It is Minerva. Minnie Mouse is a nickname that was given to the character by Ub Iwerks and Walt Disney. Minnie’s actual name is rarely used. ",
-"Minnie the Mouse’s real name is Minnie?"),
+("No","Yes","It is Minerva. Minnie Mouse is a nickname that was given to the character by Ub Iwerks and Walt Disney. Minnie’s actual name is rarely used.",
+"Minnie the Mouse real name is Minnie?"),
 ("70-80","50-60","75 burgers are sold in McDonald’s every second.","how match Mcburgers are sold in seconds?"),
 ("False","True","False. You can’t hum while holding your nose.","True or False: You can hum while holding your nose?"),
 ("False","True","False. Your eyeballs do not grow or change their size as you age.","True or False: your eyeballs grow over the yers?"),
@@ -32,7 +32,12 @@ insert into facts (true_a,false_a,answer,question) values
 "On which day are you more likely to die?"),
 ("False","True","False, Honey never spoils. If it is stored correctly, you can eat honey even 3,000 years after production","True or False: Does honey spoil?"),
 ("True","False","True, Apple seeds contain cyanide","True or False: Can apples be dangerous?"),
-("not new","yes new","If 3D technology seems relatively new to you, know that the first 3D film was shown somewhere in 1922","Is 3D technology new?");
+("not new","yes new","If 3D technology seems relatively new to you, know that the first 3D film was shown somewhere in 1922","Is 3D technology new?"),
+("france","austria","at the 16th hundred the austrian bakers made a moon shaped pai for the france queen at her visit","where does the croissant invented?"),
+("fly","mosquito","fly can maneuver around the raindrops","which insect can dodge rain?"),
+("yes","no","ant doesn't accelerate enough from height to die","can ant die from fall damage?"),
+("True","False","True, bats are mammal","True or False: if their mammal how can fly?"),
+("cats", "dogs", "cats match with 90% DNA with humans while dogs match with only 84%", "which animal have more matching DNA with humans?");
 
  create table fansfacts(
     fact_id integer primary key auto_increment,

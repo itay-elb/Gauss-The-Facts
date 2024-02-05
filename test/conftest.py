@@ -1,13 +1,17 @@
 import pytest
 import mysql.connector
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 @pytest.fixture
 def db():
     mydb = mysql.connector.connect(
-        host='mysql',
-        user='root',
-        passwd='root',
-        database='project'
+        host=os.getenv('DB_HOST'),
+        user=os.getenv('DB_USER'),
+        passwd=os.getenv('DB_PASSWD'),
+        database=os.getenv('DB_NAME'),
+        port=os.getenv('DB_PORT')
     )
     yield mydb
     mydb.close()
@@ -18,5 +22,5 @@ def app():
    yield app
 
 @pytest.fixture()
-def client(app):
+def client(app, db):
    return app.test_client()
