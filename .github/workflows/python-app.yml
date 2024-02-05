@@ -23,7 +23,8 @@ jobs:
           pip install -r ./src/requirements.txt
 
       - name: Load Environment Variables
-        run: python -c "from dotenv import load_dotenv; load_dotenv(); print('DB_HOST:', os.getenv('DB_HOST')); print('DB_PORT:', os.getenv('DB_PORT'))"
+        run: python -python -c "import os; from dotenv import load_dotenv; load_dotenv('.env'); print('DB_HOST:', os.getenv('DB_HOST')); print('DB_PORT:', os.getenv('DB_PORT'))"
+
 
       - name: Run tests
         run: |
