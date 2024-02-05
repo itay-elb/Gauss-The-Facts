@@ -16,9 +16,9 @@ else:
     mydb = mysql.connector.connect(
         host='localhost',
         user='root',
-        passwd='Itay5858',
+        passwd='root',
         database='project',
-        port=3306
+        port=3307
     )
 
 @app.route("/")
