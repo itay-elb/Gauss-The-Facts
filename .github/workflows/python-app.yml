@@ -48,10 +48,13 @@ jobs:
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: project
-        IMAGE_TAG: image_project
+        IMAGE_APP_TAG: app_project
+        IMAGE_DB_TAG: db_project
       run: |
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        docker build -f src/Dockerfile -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_APP_TAG .
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_APP_TAG
+        docker build -f db/Dockerfile -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_DB_TAG .
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_DB_TAG
 
     - name: Shutdown Docker Compose
       run: docker-compose down
