@@ -33,6 +33,9 @@ jobs:
     - name: Remove .env file
       run: rm $GITHUB_WORKSPACE/.env
 
+    - name: Shutdown Docker Compose
+      run: docker-compose down
+
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
@@ -57,5 +60,4 @@ jobs:
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_APP_TAG
 
 
-    - name: Shutdown Docker Compose
-      run: docker-compose down
+
