@@ -54,9 +54,9 @@ jobs:
         IMAGE_APP_TAG: app_project
         IMAGE_DB_TAG: db_project
       run: |
-        docker build -f db/ -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_DB_TAG .
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_DB_TAG ./db/
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_DB_TAG
-        docker build -f src/ -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_APP_TAG .
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_APP_TAG ./src/
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_APP_TAG
 
 
