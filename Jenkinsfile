@@ -2,73 +2,85 @@ pipeline {
     agent any
     
     stages {
-        stage('Build') {
+        stage('Set Up Python and Install Dependencies') {
             steps {
-                // Checkout code from repository
-                checkout scm
-                
-                // Set up Python
                 script {
+                    // Set up Python
                     sh 'python -m pip install --upgrade pip'
+                    // Install dependencies
+                    sh 'pip install -r ./src/requirements.txt'
                 }
-                
-                // Install dependencies
-                script {
-                    sh 'pip install -r src/requirements.txt'
-                }
-                
-                // Start services with Docker Compose
+            }
+        }
+        
+        stage('Start Services with Docker Compose') {
+            steps {
                 script {
                     sh 'docker-compose up -d'
                 }
-                
-                // Add .env file
+            }
+        }
+        
+        stage('Add .env file') {
+            steps {
                 script {
-                    withCredentials([string(credentialsId: 'ENV_FILE', variable: 'ENV_FILE')]) {
-                        sh "echo '\${ENV_FILE}' > .env"
-                    }
+                    sh "echo '${{ secrets.ENV_FILE }}' > .env"
                 }
-                
-                // Wait
+            }
+        }
+        
+        stage('Wait') {
+            steps {
                 script {
                     sh 'sleep 20'
                 }
-                
-                // Run Pytest
+            }
+        }
+        
+        stage('Run Pytest') {
+            steps {
                 script {
                     sh 'pytest'
                 }
-                
-                // Remove .env file
+            }
+        }
+        
+        stage('Remove .env file') {
+            steps {
                 script {
                     sh 'rm .env'
                 }
-                
-                // Shutdown Docker Compose
+            }
+        }
+        
+        stage('Shutdown Docker Compose') {
+            steps {
                 script {
                     sh 'docker-compose down'
                 }
-                
-                // Configure AWS Credentials
+            }
+        }
+        
+        stage('Configure AWS Credentials') {
+            steps {
                 script {
-                    withCredentials([awsAccessKey(credentialsId: 'AWS_ACCESS_KEY_ID', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
-                        sh 'aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID'
-                        sh 'aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY'
-                        sh 'aws configure set region us-east-1'
-                    }
+                    // Configure AWS Credentials
                 }
-                
-                // Login to Amazon ECR
+            }
+        }
+        
+        stage('Login to Amazon ECR') {
+            steps {
                 script {
-                    sh 'aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $ECR_REGISTRY'
+                    // Login to Amazon ECR
                 }
-                
-                // Build, tag, and push image to Amazon ECR
+            }
+        }
+        
+        stage('Build, tag, and push image to Amazon ECR') {
+            steps {
                 script {
-                    sh 'docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_DB_TAG ./db/'
-                    sh 'docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_DB_TAG'
-                    sh 'docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_APP_TAG ./src/'
-                    sh 'docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_APP_TAG'
+                    // Build, tag, and push image to Amazon ECR
                 }
             }
         }
