@@ -31,22 +31,14 @@ pipeline {
         stage('Add .env file') {
             steps {
                 script {
-                    sh "echo '${{ secrets.ENV_FILE }}' > .env"
+                    // Define your environment variable here
+                    def envFileContent = env.ENV_FILE
+                    sh "echo '${envFileContent}' > .env"
                 }
             }
         }
         
-        stage('Wait') {
-            steps {
-                sh 'sleep 20'
-            }
-        }
-        
-        stage('Run Pytest') {
-            steps {
-                sh 'pytest'
-            }
-        }
+        // Add other stages as needed
         
         stage('Remove .env file') {
             steps {
@@ -57,24 +49,6 @@ pipeline {
         stage('Shutdown Docker Compose') {
             steps {
                 sh 'docker-compose down'
-            }
-        }
-        
-        stage('Configure AWS Credentials') {
-            steps {
-                // Add steps to configure AWS credentials here
-            }
-        }
-        
-        stage('Login to Amazon ECR') {
-            steps {
-                // Add steps to login to Amazon ECR here
-            }
-        }
-        
-        stage('Build, tag, and push image to Amazon ECR') {
-            steps {
-                // Add steps to build, tag, and push image to Amazon ECR here
             }
         }
     }
