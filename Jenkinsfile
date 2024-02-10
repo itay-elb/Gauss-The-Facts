@@ -1,10 +1,6 @@
 pipeline {
     agent any
     
-    environment {
-        DOCKER_IMAGE = 'project:latest'
-    }
-    
     stages {
         stage('Checkout') {
             steps {
@@ -12,24 +8,37 @@ pipeline {
             }
         }
         
-        stage('Build') {
+        stage('Set Up Python') {
             steps {
                 script {
-                    docker.build DOCKER_IMAGE
+                    sh 'python -m pip install --upgrade pip'
                 }
             }
         }
         
-        stage('Set Up Python and Install Dependencies') {
+        stage('Install Dependencies') {
             steps {
-                sh 'python -m pip install --upgrade pip'
                 sh 'pip install -r ./src/requirements.txt'
             }
         }
         
         stage('Start Services with Docker Compose') {
             steps {
-                sh 'docker-compose -f docker-compose.yml up -d'
+                sh 'docker-compose up -d'
+            }
+        }
+        
+        stage('Add .env file') {
+            steps {
+                script {
+                    sh "echo '${{ secrets.ENV_FILE }}' > .env"
+                }
+            }
+        }
+        
+        stage('Wait') {
+            steps {
+                sh 'sleep 20'
             }
         }
         
@@ -39,16 +48,41 @@ pipeline {
             }
         }
         
+        stage('Remove .env file') {
+            steps {
+                sh 'rm .env'
+            }
+        }
+        
         stage('Shutdown Docker Compose') {
             steps {
-                sh 'docker-compose -f docker-compose.yml down'
+                sh 'docker-compose down'
+            }
+        }
+        
+        stage('Configure AWS Credentials') {
+            steps {
+                // Add steps to configure AWS credentials here
+            }
+        }
+        
+        stage('Login to Amazon ECR') {
+            steps {
+                // Add steps to login to Amazon ECR here
+            }
+        }
+        
+        stage('Build, tag, and push image to Amazon ECR') {
+            steps {
+                // Add steps to build, tag, and push image to Amazon ECR here
             }
         }
     }
     
     post {
         always {
-            sh 'docker-compose -f docker-compose.yml down -v --remove-orphans'
+            // Clean up docker resources
+            sh 'docker-compose down -v --remove-orphans'
         }
         success {
             emailext subject: 'Build Successful',
