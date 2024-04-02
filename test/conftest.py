@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 @pytest.fixture
-def db():
+def db():          # connect to the database with the .env file
     mydb = mysql.connector.connect(
         host=os.getenv('DB_HOST'),
         user=os.getenv('DB_USER'),
@@ -17,10 +17,10 @@ def db():
     mydb.close()
 
 @pytest.fixture
-def app():
+def app():         # enter to app
    from src.app import app
    yield app
 
 @pytest.fixture()
-def client(app, db):
+def client(app, db):      # create client who enter the app and use the database
    return app.test_client()
