@@ -48,6 +48,18 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1
 
+    - name: Delete old images with the same name
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: project
+        IMAGE_APP_TAG: app_project
+        IMAGE_DB_TAG: db_project
+      run: |
+        # Delete old DB image
+        aws ecr batch-delete-image --repository-name $ECR_REPOSITORY --image-ids imageTag=$IMAGE_DB_TAG --region us-east-1 || true
+        # Delete old App image
+        aws ecr batch-delete-image --repository-name $ECR_REPOSITORY --image-ids imageTag=$IMAGE_APP_TAG --region us-east-1 || true
+
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
