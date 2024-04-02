@@ -4,7 +4,7 @@ import random
 import os
 
 app = Flask(__name__)
-if os.environ.get('DOCKERIZED'):
+if os.environ.get('DOCKERIZED'):          # connect to the database
     mydb = mysql.connector.connect(
         host='mysql',
         user='root',
@@ -22,7 +22,7 @@ else:
     )
 
 @app.route("/")
-def index():
+def index():              # homepage take a random question and put it on the Variables
     a = random.randint(1, 2)
     i = random.randint(1, 25)
     sql = "SELECT * FROM facts WHERE fact_id = {}".format(i)
@@ -46,7 +46,7 @@ def add():
     return render_template("addfacts.html")
 
 
-@app.route("/submit_fact", methods=["POST"])
+@app.route("/submit_fact", methods=["POST"])       # take Variables and send it to the database
 def submit_fact():
     fact = request.form["fact"]
     question = request.form["question"]
@@ -65,7 +65,7 @@ def submit_fact():
     return redirect(url_for("add"))
 
 
-@app.route("/delete", methods=["POST"])
+@app.route("/delete", methods=["POST"])         # this function for the test to delete the test we do
 def delete():
     mycursor = mydb.cursor()
     sql = "delete from project.fansfacts where fact = 'good'"
