@@ -18,7 +18,7 @@ elif:
         user='root',
         passwd='root',
         database='project',
-        port=3306
+        port=3307
     )
 else:
     mydb = mysql.connector.connect(
@@ -26,7 +26,7 @@ else:
         user='root',
         passwd='root',
         database='project',
-        port=3307
+        port=3306
     )
 
 @app.route("/")
