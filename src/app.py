@@ -12,7 +12,7 @@ if os.environ.get('DOCKERIZED'):          # connect to the database
         database='project',
         port=3306
     )
-elif:
+elif
     mydb = mysql.connector.connect(
         host='localhost',
         user='root',
