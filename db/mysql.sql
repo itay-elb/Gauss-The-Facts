@@ -1,3 +1,5 @@
+CREATE DATABASE IF NOT EXISTS `project`;
+
 use project;
 
 create table facts(
