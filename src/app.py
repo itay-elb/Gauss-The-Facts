@@ -6,19 +6,11 @@ import os
 app = Flask(__name__)
 if os.environ.get('DOCKERIZED'):          # connect to the database
     mydb = mysql.connector.connect(
-        host='mysql',
-        user='root',
-        passwd='root',
-        database='project',
-        port=3306
-    )
-elif
-    mydb = mysql.connector.connect(
         host='localhost',
         user='root',
         passwd='root',
         database='project',
-        port=3307
+        port=3306
     )
 else:
     mydb = mysql.connector.connect(
@@ -26,7 +18,7 @@ else:
         user='root',
         passwd='root',
         database='project',
-        port=3306
+        port=3307
     )
 
 @app.route("/")
