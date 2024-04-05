@@ -48,21 +48,19 @@ jobs:
         aws-secret-access-key: ${{ secrets.LIOR_S_A_K }}
         aws-region: us-east-1
 
-    - name: Login to Amazon ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v1
+    - name: Login to Amazon ECR Public
+      run: aws ecr-public get-login-password --region <your-region> | docker login --username AWS --password-stdin public.ecr.aws/v4y2i9y6
 
-    - name: Build, tag, and push image to Amazon ECR
-      env:
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: project
-        IMAGE_APP_TAG: app_project
-        IMAGE_DB_TAG: db_project
+    - name: Build and push App Docker image to Amazon ECR Public
       run: |
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_DB_TAG ./db/
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_DB_TAG
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_APP_TAG ./src/
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_APP_TAG
+        docker build -t public.ecr.aws/v4y2i9y6/project:app ./src/
+        docker push public.ecr.aws/v4y2i9y6/project:app
+
+    - name: Build and push DB Docker image to Amazon ECR Public
+      run: |
+        docker build -t public.ecr.aws/v4y2i9y6/project:db ./db/
+        docker push public.ecr.aws/v4y2i9y6/project:db
+
 
 
 
