@@ -4,15 +4,18 @@ import random
 import os
 
 app = Flask(__name__)
-if os.environ.get('DOCKERIZED'):          # connect to the database
+try:
+    # Attempt to connect to the database using the first set of parameters
     mydb = mysql.connector.connect(
-        host='localhost',
+        host='mysql',
         user='root',
         passwd='root',
         database='project',
         port=3306
     )
-else:
+except mysql.connector.Error as err:
+    # If the first connection attempt fails, catch the exception and try the second set of parameters
+    print("First connection attempt failed. Trying the second connection parameters.")
     mydb = mysql.connector.connect(
         host='localhost',
         user='root',
