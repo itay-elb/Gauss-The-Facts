@@ -17,7 +17,7 @@ except mysql.connector.Error as err:
     # If the first connection attempt fails, catch the exception and try the second set of parameters
     print("First connection attempt failed. Trying the second connection parameters.")
     mydb = mysql.connector.connect(
-        host='localhost',
+        host='127.0.0.1',
         user='root',
         passwd='root',
         database='project',
