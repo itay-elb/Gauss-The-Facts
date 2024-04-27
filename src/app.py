@@ -7,7 +7,7 @@ app = Flask(__name__)
 try:
     # Attempt to connect to the database using the first set of parameters
     mydb = mysql.connector.connect(
-        host='db-project',
+        host='mysql',
         user='root',
         passwd='root',
         database='project',
