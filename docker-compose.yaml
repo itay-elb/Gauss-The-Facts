@@ -8,6 +8,8 @@ services:
       - mysql
     ports:
       - '5000:5000'
+    environment:
+      MYSQL_HOST: mysql
     networks:
       - my_network
 

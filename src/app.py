@@ -4,20 +4,25 @@ import random
 import os
 
 app = Flask(__name__)
+
+# Retrieve database hostname from environment variable
+DB_HOST = os.getenv('MYSQL_HOST', 'localhost')  # Use 'localhost' as fallback
 try:
     # Attempt to connect to the database using the first set of parameters
     mydb = mysql.connector.connect(
-        host='mysql',
+        host=DB_HOST,
         user='root',
         passwd='root',
         database='project',
         port=3306
     )
+    print("Connected to MySQL database!")
 except mysql.connector.Error as err:
+    print(f"Error connecting to MySQL: {err}")
     # If the first connection attempt fails, catch the exception and try the second set of parameters
     print("First connection attempt failed. Trying the second connection parameters.")
     mydb = mysql.connector.connect(
-        host='localhost',
+        host=DB_HOST,
         user='root',
         passwd='root',
         database='project',
