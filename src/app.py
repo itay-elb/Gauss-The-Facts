@@ -7,13 +7,16 @@ app = Flask(__name__)
 
 # Retrieve database hostname from environment variable
 DB_HOST = os.getenv('MYSQL_HOST', 'localhost')  # Use 'localhost' as fallback
+DB_USER = os.getenv('MYSQL_USER', 'root')
+DB_PASSWD = os.getenv('MYSQL_PASSWD', 'root')
+DB_DATABASE = os.getenv('MYSQL_DATABASE', 'project')
 try:
     # Attempt to connect to the database using the first set of parameters
     mydb = mysql.connector.connect(
         host=DB_HOST,
-        user='root',
-        passwd='root',
-        database='project',
+        user=DB_USER,
+        passwd=DB_PASSWD,
+        database=DB_DATABASE,
         port=3306
     )
     print("Connected to MySQL database!")
@@ -23,9 +26,9 @@ except mysql.connector.Error as err:
     print("First connection attempt failed. Trying the second connection parameters.")
     mydb = mysql.connector.connect(
         host=DB_HOST,
-        user='root',
-        passwd='root',
-        database='project',
+        user=DB_USER,
+        passwd=DB_PASSWD,
+        database=DB_DATABASE,
         port=3307
     )
 
