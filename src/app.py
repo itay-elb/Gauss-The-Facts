@@ -22,6 +22,7 @@ try:
     print("Connected to MySQL database!")
 except mysql.connector.Error as err:
     print(f"Error connecting to MySQL: {err}")
+    print("host: " + DB_HOST + " user: " + DB_USER + " password: " + DB_PASSWD + " database: " + DB_DATABASE)
     # If the first connection attempt fails, catch the exception and try the second set of parameters
     print("First connection attempt failed. Trying the second connection parameters.")
     mydb = mysql.connector.connect(
