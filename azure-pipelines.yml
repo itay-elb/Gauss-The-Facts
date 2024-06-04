@@ -1,0 +1,64 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  buildVersion: '1.0.$(Build.BuildId)'
+
+steps:
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '5.x'
+    installationPath: $(Agent.ToolsDirectory)/dotnet
+
+- task: NuGetToolInstaller@1
+
+- task: NuGetCommand@2
+  inputs:
+    restoreSolution: '**/*.sln'
+    feedsToUse: 'select'
+    nugetConfigPath: 'nuget.config'
+
+- task: VSBuild@1
+  inputs:
+    solution: '**/*.sln'
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(Build.ArtifactStagingDirectory)\\"'
+    platform: 'Any CPU'
+    configuration: 'Release'
+
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      New-Item -ItemType Directory -Force -Path "C:\IT"
+      Copy-Item -Path "$(Build.ArtifactStagingDirectory)\*" -Destination "C:\IT" -Recurse
+
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      $versionStamp = "Version: $(buildVersion)"
+      $versionStamp | Out-File -FilePath "C:\IT\VersionStamp.txt"
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
+
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      $EmailFrom = "lioramar8991@gmail.com"
+      $EmailTo = "lioramar8991@gmail.com"
+      $Subject = "Build $(Build.BuildId) - $(Build.DefinitionName)"
+      $Body = "Build $(Build.BuildId) for $(Build.DefinitionName) completed successfully."
+      $SMTPServer = "smtp.gmail.com"
+      $SMTPClient = New-Object Net.Mail.SmtpClient($SmtpServer, 587)
+      $SMTPClient.EnableSsl = $true
+      $SMTPClient.Credentials = New-Object System.Net.NetworkCredential("lioramar8991@gmail.com", "your-app-password")
+      $SMTPClient.Send($EmailFrom, $EmailTo, $Subject, $Body)
