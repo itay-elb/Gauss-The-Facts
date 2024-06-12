@@ -64,7 +64,6 @@ jobs:
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_APP_TAG ./src/
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_APP_TAG
 
-
     - name: Upload artifact for CD
       uses: actions/upload-artifact@v2
       with:
