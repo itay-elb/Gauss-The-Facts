@@ -11,13 +11,23 @@ resource "aws_vpc" "main" {
 }
 
 # Subnets
-resource "aws_subnet" "public_subnet" {
+resource "aws_subnet" "public_subnet_a" {
   vpc_id                  = aws_vpc.main.id
   cidr_block              = "10.0.1.0/24"
   map_public_ip_on_launch = true
   availability_zone       = "us-east-1a"
   tags = {
-    Name = "public-subnet"
+    Name = "public-subnet-a"
+  }
+}
+
+resource "aws_subnet" "public_subnet_b" {
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = "10.0.2.0/24"
+  map_public_ip_on_launch = true
+  availability_zone       = "us-east-1b"
+  tags = {
+    Name = "public-subnet-b"
   }
 }
 
@@ -39,7 +49,12 @@ resource "aws_route_table" "public" {
 }
 
 resource "aws_route_table_association" "a" {
-  subnet_id      = aws_subnet.public_subnet.id
+  subnet_id      = aws_subnet.public_subnet_a.id
+  route_table_id = aws_route_table.public.id
+}
+
+resource "aws_route_table_association" "b" {
+  subnet_id      = aws_subnet.public_subnet_b.id
   route_table_id = aws_route_table.public.id
 }
 
@@ -51,6 +66,20 @@ resource "aws_security_group" "ecs_security_group" {
   ingress {
     from_port   = 80
     to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 5000
+    to_port     = 5000
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 3306
+    to_port     = 3306
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -193,7 +222,7 @@ resource "aws_ecs_service" "flask_mysql_app_service" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets          = [aws_subnet.public_subnet.id]
+    subnets          = [aws_subnet.public_subnet_a.id, aws_subnet.public_subnet_b.id]
     security_groups  = [aws_security_group.ecs_security_group.id]
     assign_public_ip = true
   }
@@ -213,7 +242,7 @@ resource "aws_lb" "main" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.ecs_security_group.id]
-  subnets            = [aws_subnet.public_subnet.id]
+  subnets            = [aws_subnet.public_subnet_a.id, aws_subnet.public_subnet_b.id]
 
   tags = {
     Name = "main-lb"
