@@ -103,7 +103,7 @@ resource "aws_ecs_cluster" "main" {
 
 # IAM Role for ECS Task Execution
 resource "aws_iam_role" "ecs_task_execution_role" {
-  name = "ecsTaskExecutionRole"
+  name = "ecsTaskExecutionRoleNew" # Changed the name to avoid conflict
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -251,7 +251,7 @@ resource "aws_lb" "main" {
 
 # Target Group
 resource "aws_lb_target_group" "main" {
-  name     = "main-tg"
+  name     = "main-tg-new" # Changed the name to avoid conflict
   port     = 5000
   protocol = "HTTP"
   vpc_id   = aws_vpc.main.id
